@@ -6,7 +6,7 @@ GLANCE_IMAGE_FILE=/root/jon/dpdk512.qcow
 GLANCE_IMAGE_NAME=dpdk512
 FLAVOR_NAME=sriov-flvr
 SRIOV_POOLS=("pool_0000_0d_00_1" "pool_0000_05_00_1")
-
+SRIOV_VLAN=(0 1200)
 
 # image create if not exist
 if `!(echo $(glance image-list) | grep -w $GLANCE_IMAGE_NAME > /dev/null )`
@@ -37,11 +37,12 @@ base_ip=10
 port_cmd=""
 for pool in ${SRIOV_POOLS[@]}
 do
+    vlan=${SRIOV_VLAN[$loop_id]}
     loop_id=`expr $loop_id + 1 `
     base_ip=`expr $base_ip + 1 `
     if `!(echo $(neutron net-list) | grep -w sriov_net$loop_id > /dev/null )`
     then
-        neutron net-create --provider:physical_network=$pool --provider:network_type=vlan --provider:segmentation_id=0 sriov_net$loop_id
+        neutron net-create --provider:physical_network=$pool --provider:network_type=vlan --provider:segmentation_id=$vlan sriov_net$loop_id
         neutron subnet-create --name sriov_sn$loop_id sriov_net$loop_id 10.10.$base_ip.0/24
         neutron port-create sriov_net$loop_id --name sriov_port$loop_id --vnic-type direct
     else
