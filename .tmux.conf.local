@@ -1,1 +1,40 @@
 # Add your local tmux config here
+
+# List of plugins
+# Git clone "$ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Solarize color theme tmux
+set -g @plugin 'seebi/tmux-colors-solarized'
+
+# Install tmux-yank plugin
+set -g @plugin 'tmux-plugins/tmux-yank'
+
+# Restore tmux environment after system restart.
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+
+# Logging of all output in the panes
+set -g @plugin 'tmux-plugins/tmux-logging'
+
+
+## Settings for plugins
+
+# Set solarized themes from '256', 'dark', 'light', 'base16'
+set -g @colors-solarized '256'
+
+# Linux has several cut-and-paste clipboards: primary, secondary, and clipboard (default in tmux-yank is clipboard).
+set -g @yank_selection 'clipboard'
+
+# Set resurrect plugin. Restore env for vim
+set -g @resurrect-strategy-vim 'session'
+# Change key bindings
+set -g @resurrect-save 'S'
+#set -g @resurrect-restore 'R'
+# Automatic restore
+set -g @continuum-restore 'on'
+set -g @continuum-boot 'on'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
